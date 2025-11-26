@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">⏰</div>
+                <h2>TimeFlow</h2>
+            </div>
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" data-view="overview">
+                    <span class="nav-icon">📊</span>
+                    <span>Overview</span>
+                </button>
+                <button class="nav-item" data-view="schedule">
+                    <span class="nav-icon">📅</span>
+                    <span>Schedule</span>
+                </button>
+                <button class="nav-item" data-view="analytics">
+                    <span class="nav-icon">📈</span>
+                    <span>Analytics</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle">
+                    <span class="theme-icon">🌙</span>
+                    <span class="theme-text">Dark Mode</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="page-title">Dashboard Overview</h1>
+                    <p class="page-subtitle">Track your productive hours</p>
+                </div>
+                <div class="header-right">
+                    <div class="current-date" id="currentDate">Loading...</div>
+                    <div class="live-clock" id="liveClock">--:--:--</div>
+                </div>
+            </header>
+
+            <!-- Stats Cards Row -->
+            <div class="stats-row">
+                <div class="stat-card-large">
+                    <div class="stat-icon">⏳</div>
+                    <div class="stat-content">
+                        <div class="stat-value-large" id="hoursLeft">--</div>
+                        <div class="stat-label-large">Hours Remaining</div>
+                        <div class="stat-trend">
+                            <span class="percentage-badge" id="percentage">--%</span>
+                            <span class="trend-text">of your day</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card-large">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-content">
+                        <div class="stat-value-large" id="totalCommitted">0h</div>
+                        <div class="stat-label-large">Committed Time</div>
+                        <div class="stat-trend">
+                            <span class="trend-text">Fixed obligations</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card-large">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-content">
+                        <div class="stat-value-large" id="totalFree">0h</div>
+                        <div class="stat-label-large">Free Time</div>
+                        <div class="stat-trend">
+                            <span class="trend-text">Available today</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card-large productivity-card">
+                    <div class="stat-icon">🚀</div>
+                    <div class="stat-content">
+                        <div class="stat-value-large" id="productivityScore">--</div>
+                        <div class="stat-label-large">Productivity</div>
+                        <div class="stat-trend">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="productivityBar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Grid -->
+            <div class="dashboard-grid">
+                <!-- Chart Section -->
+                <div class="card chart-card">
+                    <div class="card-header">
+                        <h3>Time Distribution</h3>
+                        <span class="card-badge">Live</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="donutChart" width="280" height="280"></canvas>
+                        <div class="chart-center-text">
+                            <div class="center-value" id="centerHours">--</div>
+                            <div class="center-label">Hours Left</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Schedule Settings -->
+                <div class="card schedule-card">
+                    <div class="card-header">
+                        <h3>Daily Schedule</h3>
+                        <button class="btn-icon" id="calculate">🔄</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="time-inputs">
+                            <div class="time-input-group">
+                                <label>
+                                    <span class="input-icon">🌅</span>
+                                    <span>Wake Up</span>
+                                </label>
+                                <input type="time" id="wakeTime" value="07:00">
+                            </div>
+                            <div class="time-input-group">
+                                <label>
+                                    <span class="input-icon">🌙</span>
+                                    <span>Sleep</span>
+                                </label>
+                                <input type="time" id="sleepTime" value="23:00">
+                            </div>
+                        </div>
+
+                        <div class="quick-presets">
+                            <div class="presets-label">Quick Add</div>
+                            <div class="preset-buttons">
+                                <button class="btn-preset" onclick="addQuickCommitment('Lunch', '12:00', '13:00')">
+                                    <span>🍽️</span> Lunch
+                                </button>
+                                <button class="btn-preset" onclick="addQuickCommitment('Gym', '18:00', '19:30')">
+                                    <span>💪</span> Gym
+                                </button>
+                                <button class="btn-preset" onclick="addQuickCommitment('Commute', '08:00', '09:00')">
+                                    <span>🚗</span> Commute
+                                </button>
+                                <button class="btn-preset" onclick="addQuickCommitment('Meeting', '14:00', '15:00')">
+                                    <span>📅</span> Meeting
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commitments List -->
+                <div class="card commitments-card">
+                    <div class="card-header">
+                        <h3>Today's Commitments</h3>
+                        <button class="btn-add-small" id="addCommitment">+ Add</button>
+                    </div>
+                    <div class="card-body">
+                        <div class="commitments-list" id="commitmentsList"></div>
+                    </div>
+                </div>
+
+                <!-- Timeline View -->
+                <div class="card timeline-card">
+                    <div class="card-header">
+                        <h3>Day Timeline</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="timeline" id="timeline"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

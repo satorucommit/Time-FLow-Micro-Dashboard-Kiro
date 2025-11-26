@@ -1,0 +1,7 @@
+{
+  "projectName": "TimeFlow Dashboard",
+  "version": "1.0.0",
+  "type": "web-app",
+  "framework": "vanilla-js",
+  "description": "A modern time management dashboard for tracking productive hours"
+}
